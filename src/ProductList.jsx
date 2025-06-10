@@ -275,16 +275,6 @@ function ProductList({ onHomeClick }) {
         }));
     };
 
-
-    // Fungsi untuk menambah ke keranjang dan update state
-    const handleAddToCart = (plant) => {
-        dispatch(addItem(plant));
-        setAddedToCart((prev) => ({
-            ...prev,
-            [plant.name]: true
-        }));
-    };
-
     return (
         <div>
             <div className="navbar" style={styleObj}>
