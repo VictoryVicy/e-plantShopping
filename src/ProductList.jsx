@@ -224,6 +224,7 @@ function ProductList({ onHomeClick }) {
         }
     ];
 
+
     const styleObj = {
         backgroundColor: '#4CAF50',
         color: '#fff!important',
@@ -253,6 +254,7 @@ function ProductList({ onHomeClick }) {
     const handleCartClick = (e) => {
         e.preventDefault();
         setShowCart(true);
+        setShowCart(true);
     };
     const handlePlantsClick = (e) => {
         e.preventDefault();
@@ -263,6 +265,16 @@ function ProductList({ onHomeClick }) {
         e.preventDefault();
         setShowCart(false);
     };
+
+    // Fungsi untuk menambah ke keranjang dan update state
+    const handleAddToCart = (plant) => {
+        dispatch(addItem(plant));
+        setAddedToCart((prev) => ({
+            ...prev,
+            [plant.name]: true
+        }));
+    };
+
 
     // Fungsi untuk menambah ke keranjang dan update state
     const handleAddToCart = (plant) => {
@@ -316,10 +328,81 @@ function ProductList({ onHomeClick }) {
                             </h1>
                         </a>
                     </div>
+                    <div>
+                        <a href="#" onClick={(e) => handlePlantsClick(e)} style={styleA}>Plants</a>
+                    </div>
+                    <div style={{ position: 'relative' }}>
+                        <a href="#" onClick={(e) => handleCartClick(e)} style={styleA}>
+                            <h1 className='cart' style={{ margin: 0, padding: 0 }}>
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" id="IconChangeColor" height="68" width="68">
+                                    <rect width="156" height="156" fill="none"></rect>
+                                    <circle cx="80" cy="216" r="12"></circle>
+                                    <circle cx="184" cy="216" r="12"></circle>
+                                    <path d="M42.3,72H221.7l-26.4,92.4A15.9,15.9,0,0,1,179.9,176H84.1a15.9,15.9,0,0,1-15.4-11.6L32.5,37.8A8,8,0,0,0,24.8,32H8" fill="none" stroke="#faf9f9" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" id="mainIconPathAttribute"></path>
+                                </svg>
+                                {/* Badge jumlah item di cart */}
+                                <span style={{
+                                    position: 'absolute',
+                                    top: 0,
+                                    right: 0,
+                                    background: 'red',
+                                    color: 'white',
+                                    borderRadius: '50%',
+                                    padding: '2px 8px',
+                                    fontSize: '16px',
+                                    minWidth: '28px',
+                                    textAlign: 'center'
+                                }}>{totalQuantity}</span>
+                            </h1>
+                        </a>
+                    </div>
                 </div>
             </div>
             {!showCart ? (
                 <div className="product-grid">
+                    {plantsArray.map((category, index) => (
+                        <div key={index}>
+                            <h2 style={{ margin: '30px 0 10px 10px', color: '#388e3c' }}>{category.category}</h2>
+                            <div className="product-list" style={{ display: 'flex', flexWrap: 'wrap' }}>
+                                {category.plants.map((plant, plantIndex) => (
+                                    <div className="product-card" key={plantIndex} style={{
+                                        border: '1px solid #ccc',
+                                        borderRadius: '8px',
+                                        padding: '16px',
+                                        margin: '16px',
+                                        width: '250px',
+                                        background: '#fff',
+                                        boxShadow: '0 2px 8px rgba(0,0,0,0.07)'
+                                    }}>
+                                        <img
+                                            className="product-image"
+                                            src={plant.image}
+                                            alt={plant.name}
+                                            style={{ width: '100%', height: '150px', objectFit: 'cover', borderRadius: '6px' }}
+                                        />
+                                        <div className="product-title" style={{ fontWeight: 'bold', margin: '10px 0' }}>{plant.name}</div>
+                                        <div className="product-description">{plant.description}</div>
+                                        <div className="product-cost" style={{ fontWeight: 'bold', margin: '10px 0' }}>{plant.cost}</div>
+                                        <button
+                                            className="product-button"
+                                            onClick={() => handleAddToCart(plant)}
+                                            disabled={!!addedToCart[plant.name]}
+                                            style={{
+                                                backgroundColor: addedToCart[plant.name] ? '#aaa' : '#4CAF50',
+                                                color: '#fff',
+                                                border: 'none',
+                                                padding: '10px 20px',
+                                                borderRadius: '4px',
+                                                cursor: addedToCart[plant.name] ? 'not-allowed' : 'pointer'
+                                            }}
+                                        >
+                                            {addedToCart[plant.name] ? 'Sudah di Keranjang' : 'Tambah ke Keranjang'}
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    ))}
                     {plantsArray.map((category, index) => (
                         <div key={index}>
                             <h2 style={{ margin: '30px 0 10px 10px', color: '#388e3c' }}>{category.category}</h2>
